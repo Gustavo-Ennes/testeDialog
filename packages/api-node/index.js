@@ -1,15 +1,29 @@
-const express = require('express');
+const express = require("express");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const sequelize = require("./config/db");
+const postRoutes = require("./routes/posts");
+const profileRoutes = require("./routes/profile");
+const authRoutes = require("./routes/auth");
+const { authenticationMiddleware } = require("./middleware/authMiddleware");
+
 const app = express();
-const port = 3000;
 
-app.use(express.json());
+app.use(cors());
+app.use(bodyParser.json());
 
-let users = [];
+// TODO colocar middleware
+app.use("/api/posts", authenticationMiddleware, postRoutes);
+app.use("/api/profiles", authenticationMiddleware, profileRoutes);
+app.use("/api/auth/", authRoutes);
 
-app.get('/users', (req, res) => res.json(users));
-app.post('/users', (req, res) => {
-  users.push(req.body);
-  res.status(201).json(req.body);
-});
+const PORT = process.env.PORT || 5000;
 
-app.listen(port, () => console.log(`API running on http://localhost:${port}`));
+sequelize
+    .sync()
+    .then(() => {
+        app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    })
+    .catch((err) => {
+        console.error("Failed to sync database:", err);
+    });
