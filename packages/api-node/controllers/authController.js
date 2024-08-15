@@ -15,6 +15,9 @@ const signup = async (req, res) => {
                     .status(400)
                     .json({ error: "Email or password is missing." });
 
+            const user = await User.findOne({ where: { email } });
+            if (user != null) return res.status(400).json({error: "Email already taken by another user."});
+
             const hashedPassword = await hash(password, 12);
 
             const token = getNewToken({ email });
@@ -27,7 +30,7 @@ const signup = async (req, res) => {
             return res.status(500).json({ error: error.message });
         }
     } else {
-        res.status(405).end(); // Not allowed
+        return res.status(405).end(); 
     }
 };
 
@@ -42,7 +45,7 @@ const login = async (req, res) => {
 
         const user = await User.findOne({ where: { email } });
         if (user == null) {
-            res.status(404).json({ error: "User not found." });
+            return res.status(404).json({ error: "User not found." });
         }
 
         const isPasswordValid = await compare(password, user.password);

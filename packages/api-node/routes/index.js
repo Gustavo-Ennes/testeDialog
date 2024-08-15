@@ -1,4 +1,4 @@
-const { router: postRouter } = require("./posts");
+const { router: postRouter } = require("./post");
 const { router: profileRouter } = require("./profile");
 const { router: authRouter } = require("./auth");
 

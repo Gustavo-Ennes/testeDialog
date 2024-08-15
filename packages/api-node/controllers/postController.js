@@ -5,10 +5,10 @@ async function getPosts(_, res) {
         const posts = await Post.findAll({
             order: [["createdAt", "DESC"]],
         });
-        res.json(posts);
+        return res.json(posts);
     } catch (err) {
         console.error("Error fetching posts:", err);
-        res.status(500).json({ message: "Server Error" });
+        return res.status(500).json({ message: "Server Error" });
     }
 }
 
@@ -19,10 +19,10 @@ async function createPost(req, res) {
             likes: 0,
             profileId: req.body.profileId,
         });
-        res.json(newPost);
+        return res.json(newPost);
     } catch (err) {
         console.error("Error creating post:", err);
-        res.status(500).json({ message: "Server Error" });
+        return res.status(500).json({ message: "Server Error" });
     }
 }
 
@@ -34,10 +34,10 @@ async function likePost(req, res) {
         }
         post.likes += 1;
         await post.save();
-        res.json({ likes: post.likes });
+        return res.json({ likes: post.likes });
     } catch (err) {
         console.error("Error liking post:", err.response.data.error);
-        res.status(500).json({ message: "Server Error" });
+        return res.status(500).json({ message: "Server Error" });
     }
 }
 

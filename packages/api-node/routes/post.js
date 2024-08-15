@@ -1,8 +1,8 @@
 const { Router } = require("express");
 const {
-  getPosts,
-  createPost,
-  likePost,
+    getPosts,
+    createPost,
+    likePost,
 } = require("../controllers/postController");
 
 const router = Router();

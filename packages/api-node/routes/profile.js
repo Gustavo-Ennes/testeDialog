@@ -1,8 +1,8 @@
 const { Router } = require("express");
 const {
-  getProfile,
-  createProfile,
-  updateProfile,
+    getProfile,
+    createProfile,
+    updateProfile,
 } = require("../controllers/profileController");
 
 const router = Router();

@@ -7,7 +7,8 @@
     "scripts": {
         "start": "node index.js",
         "dev": "nodemon index.js",
-        "test": "NODE_ENV=test jest --runInBand"
+        "test": "NODE_ENV=test jest --runInBand",
+        "swagger": "node swagger.js"
     },
     "dependencies": {
         "axios": "^0.24.0",

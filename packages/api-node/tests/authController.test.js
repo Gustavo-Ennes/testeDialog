@@ -8,11 +8,12 @@ const { verify, decode } = require("jsonwebtoken");
 const { hash } = require("bcrypt");
 const { getNewToken } = require("../controllers/authController");
 
-describe("POST /signup", () => {
-    beforeAll(jest.clearAllMocks);
+describe("AUTH controllers: ", () => {
+    beforeEach(jest.clearAllMocks);
     afterEach(jest.clearAllMocks);
 
     it("should create a new user and return a token with valid data", async () => {
+        User.findOne.mockReturnValueOnce(null);
         User.create.mockReturnValueOnce({
             email: "eu@mail.net",
             password: "some-hashed-password",
@@ -45,41 +46,53 @@ describe("POST /signup", () => {
         expect(data.error).toEqual("Email or password is missing.");
     });
 
-    it("Should login with requirements meet", async () => {
+    it("shouldn't create a new user if username already taken", async () => {
         try {
-            const hashedPassword = await hash("12", 12);
-            User.findOne.mockReturnValueOnce({
-                email: "gustavo@ennes.dev",
-                password: hashedPassword,
-            });
-            Profile.findOne.mockReturnValueOnce({
-                name: "Gustavo Ennes",
-                description: "Software developer",
-            });
+            User.findOne.mockReturnValueOnce({ email: "", password: "" });
 
-            const response = await request(app).post("/api/auth/login").send({
+            const response = await request(app).post("/api/auth/signup").send({
                 email: "gustavo@ennes.dev",
                 password: "12",
             });
 
             const data = JSON.parse(response.text);
-            const decodedToken = decode(data.token);
 
-            expect(response.status).toBe(200);
-            verify(data.token, JWT_SECRET, (err, _) => {
-                expect(err).toBeNull();
-            });
-            expect(decodedToken.email).not.toBeNull();
-            expect(decodedToken.profile).not.toBeNull();
-            expect(JSON.parse(decodedToken.profile)).toHaveProperty("name");
-            expect(JSON.parse(decodedToken.profile)).toHaveProperty(
-                "description"
-            );
-            expect(data).toHaveProperty("token");
-            expect(data.token).not.toBeUndefined();
+            expect(response.status).toBe(400);
+            expect(data.error).toEqual("Email already taken by another user.");
         } catch (error) {
             console.error(error);
         }
+    });
+
+    it("Should login with requirements meet", async () => {
+        const hashedPassword = await hash("12", 12);
+        User.findOne.mockReturnValueOnce({
+            email: "gustavo@ennes.dev",
+            password: hashedPassword,
+        });
+        Profile.findOne.mockReturnValueOnce({
+            name: "Gustavo Ennes",
+            description: "Software developer",
+        });
+
+        const response = await request(app).post("/api/auth/login").send({
+            email: "gustavo@ennes.dev",
+            password: "12",
+        });
+
+        const data = JSON.parse(response.text);
+        const decodedToken = decode(data.token);
+
+        expect(response.status).toBe(200);
+        verify(data.token, JWT_SECRET, (err, _) => {
+            expect(err).toBeNull();
+        });
+        expect(decodedToken.email).not.toBeNull();
+        expect(decodedToken.profile).not.toBeNull();
+        expect(JSON.parse(decodedToken.profile)).toHaveProperty("name");
+        expect(JSON.parse(decodedToken.profile)).toHaveProperty("description");
+        expect(data).toHaveProperty("token");
+        expect(data.token).not.toBeUndefined();
     });
 
     it("shouldn't login without password or email", async () => {

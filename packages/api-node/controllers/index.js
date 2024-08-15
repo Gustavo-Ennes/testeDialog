@@ -3,7 +3,7 @@ const { postController } = require("./postController");
 const { profileController } = require("./profileController");
 
 module.exports = {
-  authController,
-  postController,
-  profileController,
+    authController,
+    postController,
+    profileController,
 };
