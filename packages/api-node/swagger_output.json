@@ -10,6 +10,20 @@
             "email": "gustavo@ennes.dev"
         }
     },
+    "components": {
+        "securitySchemes": {
+            "TokenAuth": {
+                "type": "apiKey",
+                "in": "header",
+                "name": "Authorization"
+            }
+        }
+    },
+    "security": [
+        {
+            "TokenAuth": []
+        }
+    ],
     "paths": {
         "/api/auth/signup": {
             "post": {
@@ -157,6 +171,11 @@
         },
         "/api/posts": {
             "get": {
+                "security": [
+                    {
+                        "TokenAuth": []
+                    }
+                ],
                 "tags": ["Post"],
                 "summary": "Retrieve all posts",
                 "responses": {
@@ -257,6 +276,11 @@
         },
         "/api/posts/{id}/like": {
             "patch": {
+                "security": [
+                    {
+                        "TokenAuth": []
+                    }
+                ],
                 "tags": ["Post"],
                 "summary": "Like a post",
                 "parameters": [
@@ -299,6 +323,11 @@
         },
         "/api/profiles": {
             "post": {
+                "security": [
+                    {
+                        "TokenAuth": []
+                    }
+                ],
                 "tags": ["Profile"],
                 "summary": "Create a new profile",
                 "requestBody": {
@@ -363,6 +392,11 @@
         },
         "/api/profiles/{id}": {
             "get": {
+                "security": [
+                    {
+                        "TokenAuth": []
+                    }
+                ],
                 "tags": ["Profile"],
                 "summary": "Retrieve a profile by ID",
                 "parameters": [
@@ -417,6 +451,11 @@
         },
         "/api/profiles/": {
             "put": {
+                "security": [
+                    {
+                        "TokenAuth": []
+                    }
+                ],
                 "tags": ["Profile"],
                 "summary": "Update a profile",
                 "requestBody": {

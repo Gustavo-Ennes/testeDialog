@@ -12,7 +12,7 @@ async function getProfile(req, res) {
 
 async function createProfile(req, res) {
     try {
-        const profile = await create({
+        const profile = await Profile.create({
             name: req.body.name,
             description: req.body.description,
             userId: req.body.userId,
