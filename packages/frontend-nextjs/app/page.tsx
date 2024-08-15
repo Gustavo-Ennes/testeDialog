@@ -58,10 +58,8 @@ const TimelinePage = () => {
     ) : (
         <PageContainer>
             <div className="min-h-screen p-4">
-                {/* Header do Perfil */}
                 <div className="bg-white shadow-md rounded-lg p-6 mb-6">
                     <div className="flex flex items-center">
-                        {/* Avatar */}
                         <div className="w-24 h-24 rounded-full bg-gray-300 mr-6">
                             <Image
                                 src={imgSrc}
@@ -84,7 +82,6 @@ const TimelinePage = () => {
                 </div>
 
                 <div className="flex">
-                    {/* Barra Lateral */}
                     <div className="w-1/4 bg-white shadow-md rounded-lg p-6 mr-6">
                         <h2 className="text-xl font-semibold mb-4">
                             Informações
@@ -97,11 +94,16 @@ const TimelinePage = () => {
                                 >
                                     Go to Profile
                                 </Link>
+                                <Link
+                                    href="/logout"
+                                    className="text-green-600 hover:underline mb-4 block text-center"
+                                >
+                                    Logout
+                                </Link>
                             </li>
                         </ul>
                     </div>
 
-                    {/* Área Principal */}
                     <div className="w-3/4 bg-white shadow-md rounded-lg p-6">
                         <div className="m-2">
                             <h2 className="text-xl text-green-500 font-semibold mb-4">
@@ -118,7 +120,6 @@ const TimelinePage = () => {
                             <h2 className="text-xl text-green-500 font-semibold mb-4">
                                 Timeline
                             </h2>
-                            {/* Aqui você renderiza as postagens do usuário */}
                             <div className="mb-4">
                                 {isLoading ? (
                                     <LoadingPage />
