@@ -1,5 +1,5 @@
 const { DataTypes } = require("sequelize");
-const sequelize = require("../config/db");
+const { sequelize } = require("../config/db");
 
 const Profile = sequelize.define(
     "Profile",
@@ -24,5 +24,4 @@ const Profile = sequelize.define(
         timestamps: true,
     }
 );
-
-module.exports = Profile;
+module.exports = { Profile };

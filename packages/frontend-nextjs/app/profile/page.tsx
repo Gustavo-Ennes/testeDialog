@@ -1,15 +1,17 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Profile from "../components/Profile";
 import PageContainer from "../components/PageContainer";
 import useAuthRedirect from "../hooks/useAuthRedirect";
+import LoadingPage from "../loading";
 
 const ProfilePage = () => {
-    useAuthRedirect();
+    const [isLoading, setIsLoading] = useState(true);
+    useAuthRedirect(setIsLoading);
     
-    return (
+    return isLoading ? <LoadingPage/> : (
         <PageContainer>
             <div className="flex flex-col items-center justify-center min-h-screen bg-green-50">
                 <div className="w-full max-w-3xl bg-white shadow-md rounded-lg p-6 text-center">

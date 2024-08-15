@@ -1,1 +1,1 @@
-exports.JWT_SECRET = "my-secret-key-from-dialog";
+module.exports = { JWT_SECRET: "my-secret-key-from-dialog" };

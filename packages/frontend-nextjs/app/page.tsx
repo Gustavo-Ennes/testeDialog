@@ -12,12 +12,13 @@ import LoadingPage from "./loading";
 import useAuthRedirect from "./hooks/useAuthRedirect";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import IProfile from "./interfaces/Profile";
 
 const TimelinePage = () => {
     const router = useRouter();
     const [posts, setPosts] = useState<IPost[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const errorFromApi = null;
+    const [profile, setProfile] = useState<IProfile | null>(null);
 
     useAuthRedirect();
 
@@ -25,11 +26,12 @@ const TimelinePage = () => {
         axios
             .get("http://localhost:5000/api/posts", {
                 headers: {
-                    authorization: localStorage.getItem("token") ?? "",
+                    authorization: localStorage?.getItem("token") ?? "",
                 },
             })
             .then((response) => {
                 setPosts(response.data);
+                setProfile(JSON.parse(localStorage.getItem("profile") ?? "{}"));
                 setIsLoading(false);
             })
             .catch((error) => {
@@ -41,7 +43,6 @@ const TimelinePage = () => {
                     localStorage.removeItem("token");
                     router.push("/login");
                 }
-                setIsLoading(false);
             });
     }, [router]);
 
@@ -52,41 +53,10 @@ const TimelinePage = () => {
     const imgSrc =
         "https://avatars.githubusercontent.com/u/34069292?s=400&u=d37d92fb366792d96e368f2c46c1384a0ea510e9&v=4";
 
-    const profile = JSON.parse(localStorage.getItem("profile") ?? "{}");
-
-    return (
+    return isLoading ? (
+        <LoadingPage />
+    ) : (
         <PageContainer>
-            {/* <div className="flex justify-between items-center justify-center min-h-screen bg-green-50 p-4">
-                <div className=" flex-row w-full max-w-3xl bg-white shadow-md rounded-lg p-6 flex items-start justify">
-                    <Image
-                        src={imgSrc}
-                        alt="Profile"
-                        height="50"
-                        width="20"
-                        className="basis-1/5 p-2"
-                        priority
-                    />
-                </div>
-                <div className="flex-row w-full max-width-3xl shadow-md rounded-lg p-6 flex items-start justify">
-                    <div className="flex-1">
-                        <Link
-                            href="/profile"
-                            className="text-green-600 hover:underline mb-4 block"
-                        >
-                            Go to Profile
-                        </Link>
-                        <PostForm
-                            onPostCreated={handlePostCreated}
-                            profileId={1}
-                        />
-                        {isLoading ? (
-                            <LoadingPage />
-                        ) : (
-                            <Timeline posts={posts} />
-                        )}
-                    </div>
-                </div>
-            </div> */}
             <div className="min-h-screen p-4">
                 {/* Header do Perfil */}
                 <div className="bg-white shadow-md rounded-lg p-6 mb-6">

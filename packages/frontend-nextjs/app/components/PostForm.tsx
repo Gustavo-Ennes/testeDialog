@@ -1,5 +1,6 @@
 import React, { FormEvent, useState } from "react";
 import axios from "axios";
+import IPostFormParams from "../interfaces/PostForm";
 
 function PostForm({ onPostCreated, profileId }: IPostFormParams) {
     const [text, setText] = useState("");
