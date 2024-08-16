@@ -9,6 +9,8 @@ jest.mock("../models/Profile", () => ({
     Profile: {
         findOne: jest.fn(),
         create: jest.fn(),
+        findByPk: jest.fn(),
+        save: () => undefined,
     },
 }));
 

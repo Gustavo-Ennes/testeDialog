@@ -18,6 +18,7 @@ const Post = sequelize.define(
                 model: "Profiles",
                 key: "id",
             },
+            onDelete: "SET NULL",
         },
     },
     {

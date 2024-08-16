@@ -18,6 +18,7 @@ const Profile = sequelize.define(
                 model: "Users",
                 key: "id",
             },
+            onDelete: "SET NULL"
         },
     },
     {
