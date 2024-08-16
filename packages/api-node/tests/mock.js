@@ -6,7 +6,20 @@ jest.mock("../models/User", () => ({
 }));
 
 jest.mock("../models/Profile", () => ({
-    Profile: { findOne: jest.fn(), create: jest.fn() },
+    Profile: {
+        findOne: jest.fn(),
+        create: jest.fn(),
+    },
+}));
+
+jest.mock("../models/Post", () => ({
+    Post: {
+        create: jest.fn(),
+        findOne: jest.fn(),
+        findAll: jest.fn(),
+        findByPk: jest.fn(),
+        save: () => undefined
+    },
 }));
 
 jest.mock("redis", () => ({

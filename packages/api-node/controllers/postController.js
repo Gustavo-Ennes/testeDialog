@@ -38,7 +38,10 @@ const getPosts = async (req, res) => {
 
 const createPost = async (req, res) => {
     try {
-        const { profileId } = req.body;
+        const { profileId, text } = req.body;
+
+        if(!text)
+            return res.status(400).send({error: "A post needs a text."})
 
         const profile = await Profile.findOne({ where: { id: profileId } });
         if (profile == null)
@@ -47,7 +50,7 @@ const createPost = async (req, res) => {
                 .json({ error: "A profile is needed to post something." });
 
         const newPost = await Post.create({
-            text: req.body.text,
+            text: text,
             likes: 0,
             profileId,
         });
@@ -55,7 +58,7 @@ const createPost = async (req, res) => {
         // add each new post to redis
         addToRedis(newPost, REDIS_COLLECTION, profileId);
 
-        return res.json(newPost);
+        return res.status(201).json(newPost);
     } catch (err) {
         console.error("Error creating post:", err);
         return res.status(500).json({ message: "Server Error" });
@@ -70,7 +73,7 @@ const likePost = async (req, res) => {
         }
         post.likes += 1;
         await post.save();
-        return res.json({ likes: post.likes });
+        return res.status(200).json({ likes: post.likes });
     } catch (err) {
         console.error("Error liking post:", err.response.data.error);
         return res.status(500).json({ message: "Server Error" });

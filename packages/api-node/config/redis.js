@@ -26,7 +26,7 @@ const addToRedis = async (item, collection, identifier) => {
     console.log(
         `CREATE: ${identifier}: ${JSON.stringify(stringValue, null, 2)}`
     );
-    let items = JSON.parse(stringValue);
+    let items = JSON.parse(stringValue ?? "{}");
 
     if (Array.isArray(items)) items.push(item);
     else {
@@ -37,7 +37,7 @@ const addToRedis = async (item, collection, identifier) => {
 
 const getFromRedis = async (collection, identifier) => {
     const stringValue = await client.get(`${collection}:${identifier}`);
-    const items = JSON.parse(stringValue);
+    const items = JSON.parse(stringValue ?? "{}");
     return Array.isArray(items) ? items : null;
 };
 

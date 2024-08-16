@@ -34,7 +34,11 @@ const signup = async (req, res) => {
                 email,
                 password: hashedPassword,
             });
-            const profile = await Profile.create({ name, description, userId: createdUser.id });
+            const profile = await Profile.create({
+                name,
+                description,
+                userId: createdUser.id,
+            });
             const token = getNewToken({ email, profile });
 
             return res.status(201).json({ token });
