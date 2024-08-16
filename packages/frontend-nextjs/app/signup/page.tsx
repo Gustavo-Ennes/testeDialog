@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { storeEmailAndProfileFromToken } from "../utils/email";
+import Link from "next/link";
 
 const Signup = () => {
     const router = useRouter();
@@ -47,6 +48,9 @@ const Signup = () => {
     return (
         <div className="flex items-center justify-center min-h-screen bg-green-50">
             <div className="w-full max-w-md p-8 bg-white shadow-md rounded-lg">
+                <Link href="/login" className="font-semibold text-green-200 mb-6 text-left">
+                  back to login
+                </Link>
                 <h1 className="text-3xl font-semibold text-green-700 mb-6 text-center">
                     Sign Up
                 </h1>
