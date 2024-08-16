@@ -7,7 +7,7 @@ const {
 
 const router = Router();
 
-router.get("/", getPosts);
+router.get("/:profileId", getPosts);
 
 router.post("/", createPost);
 

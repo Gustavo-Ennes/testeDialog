@@ -15,9 +15,9 @@ const Login = () => {
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (token) router.push("/");
-
+        
         axios
-            .post("http://localhost:5000/api/auth/token-check", {
+            .post(`${process.env.NEXT_PUBLIC_BACKEND_API}/auth/token-check`, {
                 token,
             })
             .then((response) => {
@@ -34,7 +34,7 @@ const Login = () => {
         setIsLoading(true);
         try {
             const response = await axios.post(
-                `http://localhost:5000/api/auth/login`,
+                `${process.env.NEXT_PUBLIC_BACKEND_API}/auth/login`,
                 { email, password }
             );
             setIsLoading(false);
@@ -52,6 +52,8 @@ const Login = () => {
             setIsLoading(false);
         }
     };
+
+    const handleSignup = async (e: React.FormEvent) => router.push("./signup")
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-green-50">
@@ -99,6 +101,15 @@ const Login = () => {
                         className="w-full py-2 px-4 bg-green-500 text-white font-semibold rounded-md shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
                     >
                         Login
+                    </button> 
+                    <h2 className="text-center text-green-500">OR</h2>
+                    <button
+                        type="submit"
+                        onClick={handleSignup}
+                        disabled={isLoading}
+                        className="w-full py-2 px-4 bg-yellow-300 text-green-600 font-semibold rounded-md shadow-sm hover:bg-yellow-500 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                    >
+                        Sign up
                     </button>
                 </form>{" "}
                 {loginError != "" && (

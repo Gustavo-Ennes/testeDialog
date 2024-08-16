@@ -1,7 +1,9 @@
 version: '3.8'
+
 services:
   postgres:
-    image: postgres:14
+    image: postgres:latest
+    container_name: postgres_db
     environment:
       POSTGRES_USER: sa
       POSTGRES_PASSWORD: 1Senha!.
@@ -10,6 +12,49 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - app_network
+    restart: unless-stopped
+
+  redis:
+    image: redis:latest
+    container_name: redis_container
+    ports:
+      - "6379:6379"
+    networks:
+      - app_network
+    restart: unless-stopped
+
+  frontend:
+    build: ../frontend-nextjs
+    container_name: nextjs
+    ports:
+      - "3000:3000"
+    networks:
+      - app_network
+    depends_on:
+      - backend
+    env_file:
+      - ../frontend-nextjs/.env
+
+  backend:
+    build: .
+    container_name: node_api
+    environment:
+      IS_CONTAINER: true
+    env_file:
+      - .env
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - app_network
+    restart: unless-stopped
 
 volumes:
   pgdata:
+
+networks:
+  app_network:

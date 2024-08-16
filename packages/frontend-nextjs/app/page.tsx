@@ -23,8 +23,10 @@ const TimelinePage = () => {
     useAuthRedirect();
 
     useEffect(() => {
+        const profile = JSON.parse(localStorage.getItem("profile") ?? "{}");        
+
         axios
-            .get("http://localhost:5000/api/posts", {
+            .get(`${process.env.NEXT_PUBLIC_BACKEND_API}/posts/${profile.id}`, {
                 headers: {
                     authorization: localStorage?.getItem("token") ?? "",
                 },
@@ -112,7 +114,7 @@ const TimelinePage = () => {
                             <div className="mb-4">
                                 <PostForm
                                     onPostCreated={handlePostCreated}
-                                    profileId={1}
+                                    profileId={profile?.id}
                                 />
                             </div>
                         </div>

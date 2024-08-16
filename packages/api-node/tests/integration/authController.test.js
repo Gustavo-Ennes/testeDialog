@@ -17,10 +17,19 @@ describe("AUTH controllers: ", () => {
         User.create.mockReturnValueOnce({
             email: "eu@mail.net",
             password: "some-hashed-password",
+            id: 1,
         });
+        Profile.create.mockReturnValueOnce({
+            name: "gustavo",
+            description: "dev",
+            userId: 1,
+        });
+
         const response = await request(app).post("/api/auth/signup").send({
             email: "gustavo@ennes.dev",
             password: "12",
+            name: "gustavo",
+            description: "dev",
         });
 
         const data = JSON.parse(response.text);
@@ -46,6 +55,19 @@ describe("AUTH controllers: ", () => {
         expect(data.error).toEqual("Email or password is missing.");
     });
 
+    it("shouldn't create a new user neither return a token if missing name or description in request", async () => {
+        const response = await request(app).post("/api/auth/signup").send({
+            email: "gustavo@ennes.dev",
+            password: "12",
+            name: "gustavo",
+        });
+        const data = JSON.parse(response.text);
+
+        expect(response.status).toBe(400);
+        expect(data.token).toBeUndefined();
+        expect(data.error).toEqual("Name or description is missing.");
+    });
+
     it("shouldn't create a new user if username already taken", async () => {
         try {
             User.findOne.mockReturnValueOnce({ email: "", password: "" });
@@ -53,6 +75,8 @@ describe("AUTH controllers: ", () => {
             const response = await request(app).post("/api/auth/signup").send({
                 email: "gustavo@ennes.dev",
                 password: "12",
+                name: "gustavo",
+                description: "dev",
             });
 
             const data = JSON.parse(response.text);

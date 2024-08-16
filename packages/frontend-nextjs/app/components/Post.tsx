@@ -7,10 +7,15 @@ const Post = ({ post }: { post: IPost }) => {
 
     const handleLike = () => {
         axios
-            .get(`http://localhost:5000/api/posts/${post.id}/like`, {
-                headers: { Authorization: localStorage.getItem("token") ?? "" },
-            })
-            .then((response) => setLikes(likes + 1))
+            .get(
+                `${process.env.NEXT_PUBLIC_BACKEND_API}/posts/${post.id}/like`,
+                {
+                    headers: {
+                        Authorization: localStorage.getItem("token") ?? "",
+                    },
+                }
+            )
+            .then((_) => setLikes(likes + 1))
             .catch((error) => console.error("Error liking post:", error));
     };
 

@@ -169,7 +169,7 @@
                 }
             }
         },
-        "/api/posts": {
+        "/api/posts/{profileId}": {
             "get": {
                 "security": [
                     {
@@ -178,6 +178,18 @@
                 ],
                 "tags": ["Post"],
                 "summary": "Retrieve all posts",
+                "parameters": [
+                    {
+                        "name": "profileId",
+                        "in": "path",
+                        "required": true,
+                        "description": "ID of the profile that owns the post.",
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "A list of posts",

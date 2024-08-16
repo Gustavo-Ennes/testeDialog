@@ -10,12 +10,17 @@ const { getNewToken } = require("../utils/token");
 const signup = async (req, res) => {
     if (req.method === "POST") {
         try {
-            const { email, password } = req.body;
+            const { email, password, name, description } = req.body;
 
             if (!verifyEmailAndPassword(req.body))
                 return res
                     .status(400)
                     .json({ error: "Email or password is missing." });
+
+            if (!verifyNameAndDescription(req.body))
+                return res
+                    .status(400)
+                    .json({ error: "Name or description is missing." });
 
             const user = await User.findOne({ where: { email } });
             if (user != null)
@@ -25,9 +30,12 @@ const signup = async (req, res) => {
 
             const hashedPassword = await hash(password, 12);
 
-            const token = getNewToken({ email });
-            await User.create({ email, password: hashedPassword });
-            // TODO create a profile too, since it's a requirement to login
+            const createdUser = await User.create({
+                email,
+                password: hashedPassword,
+            });
+            const profile = await Profile.create({ name, description, userId: createdUser.id });
+            const token = getNewToken({ email, profile });
 
             return res.status(201).json({ token });
         } catch (error) {

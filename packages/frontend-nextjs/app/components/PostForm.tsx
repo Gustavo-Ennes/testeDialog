@@ -11,7 +11,7 @@ function PostForm({ onPostCreated, profileId }: IPostFormParams) {
 
         try {
             const response = await axios.post(
-                "http://localhost:5000/api/posts",
+                `${process.env.NEXT_PUBLIC_BACKEND_API}/posts`,
                 {
                     text,
                     profileId,
