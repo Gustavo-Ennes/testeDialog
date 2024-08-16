@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Image from "next/image";
 import { IProfile } from "../interfaces";
 import { DEFAULT_AVATAR_URL } from "../utils/defaultAvatar";

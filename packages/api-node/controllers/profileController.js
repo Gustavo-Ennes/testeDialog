@@ -83,8 +83,8 @@ const getProfileDb = async (id) => {
 };
 
 module.exports = {
-    getProfile,
-    createProfile,
-    updateProfile,
-    deleteProfile,
+  getProfile,
+  createProfile,
+  updateProfile,
+  deleteProfile,
 };
