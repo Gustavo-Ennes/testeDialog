@@ -41,7 +41,7 @@ services:
     build: .
     container_name: node_api
     environment:
-      IS_CONTAINER: true
+      IS_CONTAINER: "true"
     env_file:
       - .env
     ports:
