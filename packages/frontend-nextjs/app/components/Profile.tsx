@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { IProfile } from "../interfaces";
 import { DEFAULT_AVATAR_URL } from "../utils/defaultAvatar";
+import { useRouter } from "next/navigation";
 
 function Profile({ profile }: { profile?: IProfile }) {
+    const router = useRouter();
+
     return (
         <div className="flex flex-col items-center bg-white p-6 rounded-lg  w-full max-w-2xl mx-auto">
             <div className="relative">
@@ -24,7 +27,10 @@ function Profile({ profile }: { profile?: IProfile }) {
                 </h2>
                 <p className="text-gray-600 mt-2">{profile?.description}</p>
                 <ul className="mt-4 space-y-2">
-                    <li className="text-green-600 hover:underline cursor-pointer">
+                    <li
+                        className="text-green-600 hover:underline cursor-pointer"
+                        onClick={() => router.push("./edit")}
+                    >
                         Edit Profile
                     </li>
                     <li className="text-green-600 hover:underline cursor-pointer">

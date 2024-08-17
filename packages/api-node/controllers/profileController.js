@@ -36,7 +36,7 @@ const createProfile = async (req, res) => {
     }
 };
 
-const updateProfile = async (req, res) => {
+const updateProfile = async (req, res) => { 
     try {
         const { id, name, description } = req.body;
         const profile = await getProfileDb(id, res);
