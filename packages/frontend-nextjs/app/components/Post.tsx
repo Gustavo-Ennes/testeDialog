@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { IPost } from "@/app/interfaces";
+import { animateCSS } from "../utils/animation";
+
 
 const Post = ({ post }: { post: IPost }) => {
     const [likes, setLikes] = useState(post.likes);
@@ -17,6 +19,8 @@ const Post = ({ post }: { post: IPost }) => {
             )
             .then((_) => setLikes(likes + 1))
             .catch((error) => console.error("Error liking post:", error));
+
+        animateCSS(".like", "rubberBand");
     };
 
     return (
@@ -26,7 +30,7 @@ const Post = ({ post }: { post: IPost }) => {
                 className="flex items-center mt-4 cursor-pointer text-green-600 hover:text-green-800"
                 onClick={handleLike}
             >
-                <span role="img" aria-label="like" className="mr-2">
+                <span role="img" aria-label="like" className="mr-2 like">
                     👍
                 </span>
                 {likes}

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 
 import Link from "next/link";
 import axios from "axios";
+import "animate.css";
 import Timeline from "./components/Timeline";
 import PostForm from "./components/PostForm";
 import PageContainer from "./components/PageContainer";
@@ -85,8 +86,8 @@ const TimelinePage = () => {
 
                 <div className="flex">
                     <div className="w-1/4 bg-white shadow-md rounded-lg p-6 mr-6">
-                        <h2 className="text-xl font-semibold mb-4">
-                            Informações
+                        <h2 className="text-xl text-center text-yellow-400 font-semibold mb-4">
+                            Go to
                         </h2>
                         <ul>
                             <li className="mb-2">
@@ -94,7 +95,7 @@ const TimelinePage = () => {
                                     href="/profile"
                                     className="text-green-600 hover:underline mb-4 block text-center"
                                 >
-                                    Go to Profile
+                                    Profile
                                 </Link>
                                 <Link
                                     href="/logout"
