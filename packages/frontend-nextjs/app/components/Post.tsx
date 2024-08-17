@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { IPost } from "@/app/interfaces";
 import { animateCSS } from "../utils/animation";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 
 const Post = ({ post }: { post: IPost }) => {
     const [likes, setLikes] = useState(post.likes);
@@ -27,11 +28,15 @@ const Post = ({ post }: { post: IPost }) => {
         <div className="bg-white border border-gray-200 rounded-lg shadow-md p-4 mb-4">
             <p className="text-gray-800 text-lg">{post.text}</p>
             <div
-                className="flex items-center mt-4 cursor-pointer text-green-600 hover:text-green-800"
+                className="flex items-center mt-4 cursor-pointer text-green-600"
                 onClick={handleLike}
             >
-                <span role="img" aria-label="like" className="mr-2 like">
-                    👍
+                <span
+                    role="img"
+                    aria-label="like"
+                    className="mr-2 like text-blue-600 hover:text-blue-500"
+                >
+                    <FontAwesomeIcon icon={faThumbsUp} className="fa-fw" />
                 </span>
                 {likes}
             </div>
