@@ -1,17 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { IProfile } from "../interfaces";
+import { DEFAULT_AVATAR_URL } from "../utils/defaultAvatar";
 
 function Profile({ profile }: { profile?: IProfile }) {
-    const imgSrc =
-        "https://avatars.githubusercontent.com/u/34069292?s=400&u=d37d92fb366792d96e368f2c46c1384a0ea510e9&v=4";
-
     return (
         <div className="flex flex-col items-center bg-white p-6 rounded-lg  w-full max-w-2xl mx-auto">
             <div className="relative">
                 <div className="w-32 h-32 overflow-hidden rounded-full border-4 border-green-200">
                     <Image
-                        src={imgSrc}
+                        src={profile?.photoUrl ?? DEFAULT_AVATAR_URL}
                         alt="Profile"
                         height={128}
                         width={128}

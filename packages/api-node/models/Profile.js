@@ -20,6 +20,11 @@ const Profile = sequelize.define(
             },
             onDelete: "SET NULL"
         },
+        photoUrl: {
+            type: DataTypes.STRING,
+            allowNull: true,
+            defaultValue: null
+        }
     },
     {
         timestamps: true,

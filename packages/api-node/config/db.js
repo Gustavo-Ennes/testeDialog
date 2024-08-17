@@ -21,4 +21,6 @@ let sequelize =
               storage: "./database.sqlite",
           });
 
+sequelize.sync({ alter: true });
+
 module.exports = { sequelize };

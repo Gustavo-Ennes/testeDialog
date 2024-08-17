@@ -13,6 +13,7 @@ import useAuthRedirect from "./hooks/useAuthRedirect";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import IProfile from "./interfaces/Profile";
+import { DEFAULT_AVATAR_URL } from "./utils/defaultAvatar";
 
 const TimelinePage = () => {
     const router = useRouter();
@@ -23,8 +24,8 @@ const TimelinePage = () => {
     useAuthRedirect();
 
     useEffect(() => {
-        const profile = JSON.parse(localStorage.getItem("profile") ?? "{}");        
-
+        const profile = JSON.parse(localStorage.getItem("profile") ?? "{}");
+        
         axios
             .get(`${process.env.NEXT_PUBLIC_BACKEND_API}/posts/${profile.id}`, {
                 headers: {
@@ -39,7 +40,7 @@ const TimelinePage = () => {
             .catch((error) => {
                 console.error(
                     "Error fetching posts:",
-                    error.response.data.error
+                    error.response.data?.error
                 );
                 if (error.response.data.error) {
                     localStorage.removeItem("token");
@@ -52,9 +53,6 @@ const TimelinePage = () => {
         setPosts([newPost, ...posts]);
     };
 
-    const imgSrc =
-        "https://avatars.githubusercontent.com/u/34069292?s=400&u=d37d92fb366792d96e368f2c46c1384a0ea510e9&v=4";
-
     return isLoading ? (
         <LoadingPage />
     ) : (
@@ -64,7 +62,9 @@ const TimelinePage = () => {
                     <div className="flex flex items-center">
                         <div className="w-24 h-24 rounded-full bg-gray-300 mr-6">
                             <Image
-                                src={imgSrc}
+                                src={
+                                    profile?.photoUrl ?? DEFAULT_AVATAR_URL
+                                }
                                 alt="Profile"
                                 height="50"
                                 width="50"
