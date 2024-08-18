@@ -6,15 +6,11 @@ Este repositório contém um desafio técnico para desenvolvedores de diferentes
 
 ## Níveis de Experiência
 
-### Nível Pleno
+### Nível Sênior
 
 #### Requisitos Adicionais
-- **Frontend Avançado:** Já feito em nextjs no nível jr.
-  - Interface mais rica animate.css e fontawesome.
-- **Banco de Dados:** Integração com um banco de dados relacional (ex: PostgreSQL).
-  - Persistidos dados de usuários, postagens e reações (curtidas).
-- **Cache:** Cache implementado.
-- **Testes de Integração:** Testes de integração com jest e supertest para todas as rotas
+- **WebSocket:** WebSocket implementado para criação de perfis
+- **Monitoramento e Logs:** Logs implementados com winston salvando no banco.
 
 #### Implementação Inicial (api-node && frontend-nextjs)
 - **Dependências**: O projeto foi configurado para rodar com Node.js e postgreSQL.
