@@ -228,6 +228,7 @@ describe("PROFILE controllers: ", () => {
     });
 
     it("shouldn't update without a profile id", async () => {
+        Profile.findByPk.mockReturnValueOnce(null);
         const response = await request(app)
             .put("/api/profiles/")
             .set("Authorization", getNewToken({ email: "as@as", profile: {} }))
@@ -242,7 +243,8 @@ describe("PROFILE controllers: ", () => {
             "Update needs id plus name or description"
         );
     });
-    it("shouldn't updateif there's nothing to update(name, description)", async () => {
+    it("shouldn't update if there's nothing to update(name, description)", async () => {
+        Profile.findByPk.mockReturnValueOnce(null);
         const response = await request(app)
             .put("/api/profiles/")
             .set("Authorization", getNewToken({ email: "as@as", profile: {} }))

@@ -9,8 +9,6 @@ const postgresPort = process.env.DB_PORT;
 const postgresDb = process.env.DB_NAME;
 const dbUrl = `postgres://${postgresUser}:${postgresPassword}@${postgresHost}:${postgresPort}/${postgresDb}`;
 
-console.log(`dbUrl: ${dbUrl}`);
-
 let sequelize =
     process.env.NODE_ENV != "test"
         ? new Sequelize(dbUrl, {

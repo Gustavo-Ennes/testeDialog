@@ -6,27 +6,33 @@ const { hash, compare } = require("bcrypt");
 const { JWT_SECRET } = require("../config/auth");
 const { verifyEmailAndPassword, verifyNameAndDescription } = require("../validation");
 const { getNewToken } = require("../utils/token");
+const { getLogger } = require("../config/winston");
+
+const authLogger = getLogger("AuthController");
 
 const signup = async (req, res) => {
     if (req.method === "POST") {
         try {
             const { email, password, name, description } = req.body;
 
-            if (!verifyEmailAndPassword(req.body))
-                return res
-                    .status(400)
-                    .json({ error: "Email or password is missing." });
+            if (!verifyEmailAndPassword(req.body)) {
+                const error = "Email or password is missing.";
+                authLogger.error(error);
+                return res.status(400).json({ error });
+            }
 
-            if (!verifyNameAndDescription(req.body))
-                return res
-                    .status(400)
-                    .json({ error: "Name or description is missing." });
+            if (!verifyNameAndDescription(req.body)) {
+                const error = "Name or description is missing.";
+                authLogger.error(error);
+                return res.status(400).json({ error });
+            }
 
             const user = await User.findOne({ where: { email } });
-            if (user != null)
-                return res
-                    .status(400)
-                    .json({ error: "Email already taken by another user." });
+            if (user != null) {
+                const error = "Email already taken by another user.";
+                authLogger.error(error);
+                return res.status(400).json({ error });
+            }
 
             const hashedPassword = await hash(password, 12);
 
@@ -41,10 +47,14 @@ const signup = async (req, res) => {
             });
             const token = getNewToken({ email, profile });
 
+            authLogger.info(
+                `User ${createdUser.email} and a token was created.`
+            );
             return res.status(201).json({ token });
-        } catch (error) {
-            console.error(`error: ${error.message}`);
-            return res.status(500).json({ error: error.message });
+        } catch (err) {
+            const error = `Error at signup: ${err.message}`;
+            authLogger.error(error, { body: req.body });
+            return res.status(500).json({ error });
         }
     } else {
         return res.status(405).end();
@@ -52,33 +62,44 @@ const signup = async (req, res) => {
 };
 
 const login = async (req, res) => {
-    try {
-        const { email, password } = req.body;
+    const { email, password } = req.body;
 
-        if (!verifyEmailAndPassword(req.body))
-            return res
-                .status(400)
-                .json({ error: "Email or password is missing." });
+    try {
+        if (!verifyEmailAndPassword(req.body)) {
+            const error = "Email or password is missing.";
+            authLogger.error(error);
+            return res.status(400).json({ error });
+        }
 
         const user = await User.findOne({ where: { email } });
         if (user == null) {
-            return res.status(404).json({ error: "User not found." });
+            const error = "User not found.";
+            authLogger.error(error, {body: req.body});
+            return res.status(404).json({ error });
         }
 
         const isPasswordValid = await compare(password, user.password);
         if (!isPasswordValid) {
-            return res.status(401).json({ error: "Invalid password." });
+            const error = "Invalid password.";
+            authLogger.error(error);
+            return res.status(401).json({ error });
         }
 
         const profile = await Profile.findOne({ where: { userId: user.id } });
-        if (!profile)
-            return res.status(404).json({ error: "No user profile found." });
+        if (!profile) {
+            const error = "No user profile found.";
+            authLogger.error(error);
+            return res.status(404).json({ error });
+        }
 
         const token = getNewToken({ email, profile });
+
+        authLogger.info(`User ${profile.name} is logged in.`);
         return res.status(200).json({ token });
     } catch (err) {
-        console.error("Error at login:", err);
-        return res.status(500);
+        const error = `Error at login: ${err.message}`;
+        authLogger.error(error, { email });
+        return res.status(500).json({ error });
     }
 };
 

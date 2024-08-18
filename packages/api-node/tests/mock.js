@@ -20,8 +20,15 @@ jest.mock("../models/Post", () => ({
         findOne: jest.fn(),
         findAll: jest.fn(),
         findByPk: jest.fn(),
-        save: () => undefined
+        save: () => undefined,
     },
+}));
+
+jest.mock("../config/winston", () => ({
+    getLogger: () => ({
+        info: jest.fn(),
+        error: jest.fn(),
+    }),
 }));
 
 jest.mock("redis", () => ({

@@ -1,16 +1,23 @@
 const { User } = require("../models/User");
 const { Profile } = require("../models/Profile");
+const { getLogger } = require("../config/winston");
+
+const profileLogger = getLogger("ProfileController");
 
 const getProfile = async (req, res) => {
     try {
         const profile = await getProfileDb(req.params.id, res);
+        if (!profile) {
+            const error = "Profile not found";
+            profileLogger.error(error);
+            return res.status(404).json({ error });
+        }
 
-        return profile
-            ? res.status(200).json(profile)
-            : res.status(404).json({ error: "Profile not found" });
+        return res.status(200).json(profile);
     } catch (err) {
-        console.error("Error fetching profile:", err);
-        return res.status(500).json({ message: "Server Error" });
+        const error = `Error fetching profile: ${err.message}`;
+        profileLogger.error(error, { params: req.params });
+        return res.status(500).json({ error });
     }
 };
 
@@ -19,10 +26,11 @@ const createProfile = async (req, res) => {
         const { userId, name, description } = req.body;
         const user = await User.findOne({ where: { id: userId } });
 
-        if (user == null || !name || !description)
-            return res
-                .status(404)
-                .json({ error: "User should exists before it's profile." });
+        if (user == null || !name || !description) {
+            const error = "User should exists before it's profile.";
+            profileLogger.error(error);
+            return res.status(404).json({ error });
+        }
 
         const profile = await Profile.create({
             name,
@@ -31,48 +39,54 @@ const createProfile = async (req, res) => {
         });
         return res.status(201).json(profile);
     } catch (err) {
-        console.error("Error creating profile:", err);
-        return res.status(500).json({ error: "Server Error" });
+        const error = `Error creating the profile: ${err.message}`;
+        profileLogger.error(error, { body: req.body });
+        return res.status(500).json({ error });
     }
 };
 
-const updateProfile = async (req, res) => { 
+const updateProfile = async (req, res) => {
     try {
         const { id, name, description } = req.body;
-        const profile = await getProfileDb(id, res);
+        if (!id || (!name && !description)) {
+            const error = "Update needs id plus name or description";
+            profileLogger.error(error);
+            return res.status(400).send({ error });
+        }
 
-        if (!id || (!name && !description))
-            return res
-                .status(400)
-                .send({ error: "Update needs id plus name or description" });
+        const profile = await getProfileDb(id, res);
+        if (!profile) {
+            const error = "Profile not found";
+            profileLogger.error(error);
+            return res.status(404).json({ error });
+        }
 
         profile.name = name ?? profile.name;
         profile.description = description ?? profile.description;
         await profile.save();
         return res.json(profile);
     } catch (err) {
-        console.error("Error updating profile:", err);
-        return res.status(500).json({ error: "Server Error" });
+        const error = `Error updating the profile: ${err.message}`;
+        profileLogger.error(error, { body: req.body });
+        return res.status(500).json({ error });
     }
 };
 
 const deleteProfile = async (req, res) => {
     try {
         const profile = await getProfileDb(req.params.id);
-        console.log(
-            "🚀 ~ deleteProfile ~  to delete:",
-            JSON.stringify(profile)
-        );
-
-        if (profile) {
-            await profile.destroy();
-            return res.status(200).send();
+        if (!profile) {
+            const error = "Profile not found";
+            profileLogger.error(error, { params: req.params });
+            return res.status(404).json({ error });
         }
 
-        return res.status(404).json({ error: "Profile not found" });
+        await profile.destroy();
+        return res.status(200).send();
     } catch (err) {
-        console.error("Error deleting profile:", err);
-        return res.status(500).json({ error: "Server Error" });
+        const error = `Error deleting the profile: ${err.message}`;
+        profileLogger.error(error, { params: req.params });
+        return res.status(500).json({ error });
     }
 };
 
