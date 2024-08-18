@@ -44,7 +44,8 @@
                                     "password": {
                                         "type": "string",
                                         "example": "password123"
-                                    },"name": {
+                                    },
+                                    "name": {
                                         "type": "string",
                                         "example": "Jhon Doe"
                                     },
@@ -176,64 +177,7 @@
                 }
             }
         },
-        "/api/posts/{profileId}": {
-            "get": {
-                "security": [
-                    {
-                        "TokenAuth": []
-                    }
-                ],
-                "tags": ["Post"],
-                "summary": "Retrieve all posts",
-                "parameters": [
-                    {
-                        "name": "profileId",
-                        "in": "path",
-                        "required": true,
-                        "description": "ID of the profile that owns the post.",
-                        "schema": {
-                            "type": "integer",
-                            "example": 1
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "A list of posts",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "object",
-                                        "properties": {
-                                            "id": {
-                                                "type": "integer",
-                                                "example": 1
-                                            },
-                                            "text": {
-                                                "type": "string",
-                                                "example": "This is a post"
-                                            },
-                                            "likes": {
-                                                "type": "integer",
-                                                "example": 5
-                                            },
-                                            "profileId": {
-                                                "type": "integer",
-                                                "example": 2
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Server error"
-                    }
-                }
-            },
+        "/api/posts": {
             "post": {
                 "tags": ["Post"],
                 "summary": "Create a new post",
@@ -281,6 +225,65 @@
                                         "profileId": {
                                             "type": "integer",
                                             "example": 2
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            }
+        },
+        "/api/posts/{profileId}": {
+            "get": {
+                "security": [
+                    {
+                        "TokenAuth": []
+                    }
+                ],
+                "tags": ["Post"],
+                "summary": "Retrieve all posts",
+                "parameters": [
+                    {
+                        "name": "profileId",
+                        "in": "path",
+                        "required": true,
+                        "description": "ID of the profile that owns the post.",
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A list of posts",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "text": {
+                                                "type": "string",
+                                                "example": "This is a post"
+                                            },
+                                            "likes": {
+                                                "type": "integer",
+                                                "example": 5
+                                            },
+                                            "profileId": {
+                                                "type": "integer",
+                                                "example": 2
+                                            }
                                         }
                                     }
                                 }

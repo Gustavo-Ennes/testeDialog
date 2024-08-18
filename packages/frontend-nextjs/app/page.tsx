@@ -26,7 +26,7 @@ const TimelinePage = () => {
 
     useEffect(() => {
         const profile = JSON.parse(localStorage.getItem("profile") ?? "{}");
-        
+
         axios
             .get(`${process.env.NEXT_PUBLIC_BACKEND_API}/posts/${profile.id}`, {
                 headers: {
@@ -34,14 +34,19 @@ const TimelinePage = () => {
                 },
             })
             .then((response) => {
-                setPosts(response.data);
+                const sortedPosts = response.data.sort(
+                    (a: IPost, b: IPost) =>
+                        new Date(b.updatedAt).getTime() -
+                        new Date(a.updatedAt).getTime()
+                );
+                setPosts(sortedPosts);
                 setProfile(JSON.parse(localStorage.getItem("profile") ?? "{}"));
                 setIsLoading(false);
             })
             .catch((error) => {
                 console.error(
                     "Error fetching posts:",
-                    error.response.data?.error
+                    error.response?.data?.error ?? error.message
                 );
                 if (error.response.data.error) {
                     localStorage.removeItem("token");
@@ -63,9 +68,7 @@ const TimelinePage = () => {
                     <div className="flex flex items-center">
                         <div className="w-24 h-24 rounded-full bg-gray-300 mr-6">
                             <Image
-                                src={
-                                    profile?.photoUrl ?? DEFAULT_AVATAR_URL
-                                }
+                                src={profile?.photoUrl ?? DEFAULT_AVATAR_URL}
                                 alt="Profile"
                                 height="50"
                                 width="50"
@@ -127,7 +130,7 @@ const TimelinePage = () => {
                                 {isLoading ? (
                                     <LoadingPage />
                                 ) : (
-                                    <Timeline posts={posts} />
+                                    <Timeline onWebSocketMessage={handlePostCreated} posts={posts} />
                                 )}
                             </div>
                         </div>

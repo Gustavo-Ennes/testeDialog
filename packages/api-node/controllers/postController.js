@@ -6,6 +6,7 @@ const {
 } = require("../config/redis");
 const { Profile } = require("../models/Profile");
 const { getLogger } = require("../config/winston");
+const { notifyClients } = require("../config/webSocket");
 
 const postLogger = getLogger("PostController");
 
@@ -68,6 +69,7 @@ const createPost = async (req, res) => {
 
         // add each new post to redis
         addToRedis(newPost, REDIS_COLLECTION, profileId);
+        notifyClients(newPost);
 
         return res.status(201).json(newPost);
     } catch (err) {

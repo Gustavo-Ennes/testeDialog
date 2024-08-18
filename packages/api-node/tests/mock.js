@@ -1,3 +1,5 @@
+const { connectWebSocket } = require("../config/webSocket");
+
 jest.mock("../models/User", () => ({
     User: {
         create: jest.fn(),
@@ -38,6 +40,7 @@ jest.mock("redis", () => ({
     }),
 }));
 
-jest.mock("../models/Post", () => ({
-    Post: { findAll: jest.fn(), create: jest.fn(), findByPk: jest.fn() },
+jest.mock("../config/webSocket", () => ({
+    notifyClients: jest.fn(),
+    connectWebSocket: jest.fn(),
 }));
