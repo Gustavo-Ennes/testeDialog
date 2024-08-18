@@ -1,9 +1,11 @@
 const { User } = require("../models/User");
 const { Profile } = require("../models/Profile");
 
-const { verify, sign } = require("jsonwebtoken");
+const { verify } = require("jsonwebtoken");
 const { hash, compare } = require("bcrypt");
 const { JWT_SECRET } = require("../config/auth");
+const { verifyEmailAndPassword } = require("../validation");
+const { getNewToken } = require("../utils/token");
 
 const signup = async (req, res) => {
     if (req.method === "POST") {
@@ -16,7 +18,10 @@ const signup = async (req, res) => {
                     .json({ error: "Email or password is missing." });
 
             const user = await User.findOne({ where: { email } });
-            if (user != null) return res.status(400).json({error: "Email already taken by another user."});
+            if (user != null)
+                return res
+                    .status(400)
+                    .json({ error: "Email already taken by another user." });
 
             const hashedPassword = await hash(password, 12);
 
@@ -30,7 +35,7 @@ const signup = async (req, res) => {
             return res.status(500).json({ error: error.message });
         }
     } else {
-        return res.status(405).end(); 
+        return res.status(405).end();
     }
 };
 
@@ -72,16 +77,6 @@ const tokenCheck = (req, res) => {
         return res.status(200).send({ status });
     });
 };
-
-const getNewToken = ({ email, profile, expired = false }) =>
-    sign({ email, profile: JSON.stringify(profile) }, JWT_SECRET, {
-        expiresIn: expired ? -1 : "10h",
-    });
-const verifyEmailAndPassword = (body) =>
-    body.email != null &&
-    body.email != "" &&
-    body.password != null &&
-    body.password != "";
 
 module.exports = {
     login,

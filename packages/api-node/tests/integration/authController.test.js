@@ -1,12 +1,12 @@
-require("./mock");
+require("../mock");
 const request = require("supertest");
-const { app } = require("../app");
-const { User } = require("../models/User");
-const { Profile } = require("../models/Profile");
-const { JWT_SECRET } = require("../config/auth");
+const { app } = require("../../app");
+const { User } = require("../../models/User");
+const { Profile } = require("../../models/Profile");
+const { JWT_SECRET } = require("../../config/auth");
 const { verify, decode } = require("jsonwebtoken");
 const { hash } = require("bcrypt");
-const { getNewToken } = require("../controllers/authController");
+const { getNewToken } = require("../../controllers/authController");
 
 describe("AUTH controllers: ", () => {
     beforeEach(jest.clearAllMocks);
