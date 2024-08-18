@@ -40,8 +40,8 @@ const createPost = async (req, res) => {
     try {
         const { profileId, text } = req.body;
 
-        if(!text)
-            return res.status(400).send({error: "A post needs a text."})
+        if (!text)
+            return res.status(400).send({ error: "A post needs a text." });
 
         const profile = await Profile.findOne({ where: { id: profileId } });
         if (profile == null)
@@ -75,7 +75,10 @@ const likePost = async (req, res) => {
         await post.save();
         return res.status(200).json({ likes: post.likes });
     } catch (err) {
-        console.error("Error liking post:", err.response.data.error);
+        console.error(
+            "Error liking post:",
+            err.response?.data?.error ?? err.message
+        );
         return res.status(500).json({ message: "Server Error" });
     }
 };

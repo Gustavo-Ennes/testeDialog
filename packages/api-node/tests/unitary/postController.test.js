@@ -5,12 +5,13 @@ const {
     likePost,
 } = require("../../controllers/postController");
 const { Post } = require("../../models/Post");
+const { Profile } = require("../../models/Profile");
 
 describe("POST | Unitary", () => {
     it("should get the posts", async () => {
         const mockedPosts = [{ id: 1, text: "text" }];
         Post.findAll.mockReturnValueOnce(mockedPosts);
-        const req = {};
+        const req = { params: { profileId: 1 } };
         const res = {
             json: jest.fn().mockReturnValueOnce(mockedPosts),
         };
@@ -25,10 +26,12 @@ describe("POST | Unitary", () => {
     it("should create the posts", async () => {
         const createPayload = { text: "text", profileId: 1 };
         const mockedPost = { id: 1, ...createPayload };
+        Profile.findOne.mockReturnValueOnce({ id: 1 });
         Post.create.mockReturnValueOnce(mockedPost);
         const req = { body: createPayload };
         const res = {
             json: jest.fn().mockReturnValueOnce(mockedPost),
+            status: jest.fn().mockReturnThis(),
         };
 
         const retrievedPost = await createPost(req, res);
@@ -48,7 +51,8 @@ describe("POST | Unitary", () => {
         });
         const req = { params: { id: 1 } };
         const res = {
-            json: jest.fn().mockReturnValueOnce({likes: likes + 1}),
+            json: jest.fn().mockReturnValueOnce({ likes: likes + 1 }),
+            status: jest.fn().mockReturnThis(),
         };
 
         const likeResponse = await likePost(req, res);

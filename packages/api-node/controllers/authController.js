@@ -4,7 +4,7 @@ const { Profile } = require("../models/Profile");
 const { verify } = require("jsonwebtoken");
 const { hash, compare } = require("bcrypt");
 const { JWT_SECRET } = require("../config/auth");
-const { verifyEmailAndPassword } = require("../validation");
+const { verifyEmailAndPassword, verifyNameAndDescription } = require("../validation");
 const { getNewToken } = require("../utils/token");
 
 const signup = async (req, res) => {
