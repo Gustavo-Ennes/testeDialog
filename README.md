@@ -6,26 +6,26 @@ Este repositório contém um desafio técnico para desenvolvedores de diferentes
 
 ## Níveis de Experiência
 
-### Nível Júnior
+### Nível Pleno
 
-#### Requisitos Concluídos
-- **API RESTful:** Api REST nodejs foi criada.
-  - Operações CRUD (Create, Read, Update, Delete) para os perfis feitas.
-  - Endpoint para criação de postagens na timeline.
-  - Endpoint para reagir a postagens com curtidas.
-- **Frontend Básico:** Utilizar React ou Next.js para criar uma tela de perfil e uma timeline de postagens.
-  - Exibir postagens na timeline com a capacidade de adicionar novas postagens e curtir.
-- **Autenticação:** Implementar autenticação utilizando JWT, para todas as chamadas exceto login e signup.
-- **Testes Unitários:** Testes unitários de rotas e funções de validação e utils.
-- **Documentação:** Api documentada com Swagger.
+#### Requisitos Adicionais
+- **Frontend Avançado:** Já feito em nextjs no nível jr.
+  - Interface mais rica animate.css e fontawesome.
+- **Banco de Dados:** Integração com um banco de dados relacional (ex: PostgreSQL).
+  - Persistidos dados de usuários, postagens e reações (curtidas).
+- **Cache:** Cache implementado.
+- **Testes de Integração:** Testes de integração com jest e supertest para todas as rotas
 
 #### Implementação Inicial (api-node && frontend-nextjs)
-- **Dependências**: O projeto foi configurado para rodar com Node.js e SQLite.
+- **Dependências**: O projeto foi configurado para rodar com Node.js e postgreSQL.
 - **Instruções de Uso**: 
   - Para rodar o projeto, utilize os scripts nas pastas `packages/api-node` e `frontend-nextjs`:
+    1. Tenha docker e docker-compose instalados
+    2. Preencha seu arquivo .env como as variáveis desejadas
+    3. Rode os containeres
+
     ```bash
-    npm run i
-    npm run dev
+    docker-compose up --build
     ```
 
 
